@@ -12,7 +12,22 @@ app.use(express.static(publicPath))
 io.on('connection', (socket) => {
     console.log('new user connected');
 
-    socket.on('disconnect',()=>{
+    //socket.emit sends message to one user while io.emit sends message to all the users
+    // socket.emit('newMessage', {
+    //     from: 'Ali',
+    //     text: 'hi!',
+    //     createdAt: 87458
+    // });
+
+    socket.on('createMessage', (message) => {
+        console.log('server createMessage', message);
+        io.emit('newMessage', {
+            from: message.from,
+            text: message.text
+        })
+    });
+
+    socket.on('disconnect', () => {
         console.log('Disconnected from client');
     });
 });
